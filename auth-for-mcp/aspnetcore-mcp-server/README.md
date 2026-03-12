@@ -1,7 +1,6 @@
-# MCP Server
+# C# MCP Server with Auth0 Authentication
 
-This README was created using the C# MCP server project template.
-It demonstrates how you can easily create an MCP server using C# and run it as an ASP.NET Core web application.
+This project demonstrates an ASP.NET Core MCP (Model Context Protocol) server with JWT-based authentication using Auth0. The server exposes tools for generating random numbers and managing system state, with authorization policies controlling access based on permission claims. 
 
 The MCP server is built as a self-contained application and does not require the .NET runtime to be installed on the target machine.
 However, since it is self-contained, it must be built for each target platform separately.
@@ -15,7 +14,13 @@ By default, the template is configured to build for:
 
 If you require more platforms to be supported, update the list of runtime identifiers in the project's `<RuntimeIdentifiers />` element.
 
-Please note that this template is currently in an early preview stage. If you have feedback, please take a [brief survey](http://aka.ms/dotnet-mcp-template-survey).
+To learn more about this project's implementation, read the blog post [Secure a C# MCP Server with Auth0](https://auth0.com/blog/secure-csharp-mcp-server-with-auth0/).
+
+## Requirements
+
+* .NET 10 SDK (for building and running the project locally)
+* An Auth0 account: If you don't already have one, you can [sign up for free](https://a0.to/signup).
+* VS Code or Visual Studio with MCP support (Preview)
 
 ## Developing locally
 
@@ -39,14 +44,23 @@ Refer to the VS Code or Visual Studio documentation for more information on conf
 
 ## Testing the MCP Server
 
-Once configured, you can ask Copilot Chat for a random number, for example, `Give me 3 random numbers`. It should prompt you to use the `get_random_number` tool on the `AspNetCoreMcpServer` MCP server and show you the results.
+Once configured, you can test the available tools through Copilot Chat:
+
+* **Random Number Generation**: Ask `Give me 3 random numbers`. Copilot should use the `get_random_number` tool to generate random numbers.
+
+* **Get System State**: Ask `What is the current system state?`. Copilot should use the `get_system_state` tool to retrieve the state. This requires the `tool:getsystemstate` permission.
+
+* **Set System State**: Ask `Set the system state to Running`. Copilot should use the `set_system_state` tool to update the state. This requires the `tool:setsystemstate` permission.
 
 ## Known issues
 
-1. When using VS Code, connecting to `https://localhost:5253` fails.
-  * This is related to using a self-signed developer certificate, even when the certificate is trusted by the system.
-  * Connecting with `http://localhost:6185` succeeds.
-  * See [Cannot connect to MCP server via SSE using trusted developer certificate (microsoft/vscode#248170)](https://github.com/microsoft/vscode/issues/248170) for more information.
+When using VS Code, connecting to `https://localhost:5253` fails.
+
+This is related to using a self-signed developer certificate, even when the certificate is trusted by the system.
+
+Connecting with `http://localhost:6185` succeeds.
+
+See [Cannot connect to MCP server via SSE using trusted developer certificate (microsoft/vscode#248170)](https://github.com/microsoft/vscode/issues/248170) for more information.
 
 ## More information
 
@@ -54,5 +68,4 @@ ASP.NET Core MCP servers use the [ModelContextProtocol.AspNetCore](https://www.n
 
 - [Official Documentation](https://modelcontextprotocol.io/)
 - [Protocol Specification](https://spec.modelcontextprotocol.io/)
-- [GitHub Organization](https://github.com/modelcontextprotocol)
 - [MCP C# SDK](https://modelcontextprotocol.github.io/csharp-sdk)
