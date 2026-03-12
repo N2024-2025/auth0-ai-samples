@@ -11,7 +11,7 @@ internal enum SystemState
 }
 
 /// <summary>
-/// MCP tools that expose operations for managing the state of a dummy system.
+/// MCP tools that expose operations for managing the state of a fictitious system.
 /// </summary>
 internal class SystemTools
 {
@@ -19,7 +19,7 @@ internal class SystemTools
     private static SystemState? _currentState;
 
     [McpServerTool]
-    [Description("Returns the current state of the dummy system. Possible states are: Ready, Waiting, Running, Stopped.")]
+    [Description("Returns the current state of the fictitious system. Possible states are: Ready, Waiting, Running, Stopped.")]
     [Authorize(Policy = "GetSystemStatePolicy")]
     public string GetSystemState()
     {
@@ -28,7 +28,7 @@ internal class SystemTools
     }
 
     [McpServerTool]
-    [Description("Sets the current state of the dummy system. Valid states are: Ready, Waiting, Running, Stopped.")]
+    [Description("Sets the current state of the fictitious system. Valid states are: Ready, Waiting, Running, Stopped.")]
     [Authorize(Policy = "SetSystemStatePolicy")]
     public string SetSystemState(
         [Description("The new state to set. Must be one of: Ready, Waiting, Running, Stopped.")] SystemState state)
