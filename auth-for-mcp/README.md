@@ -39,3 +39,7 @@ Explore the following examples demonstrating the integration of **Auth0** with M
 - **NextJS + TypeScript (JavaScript):**
    A NextJS server example implementation of an MCP server using NextJS framework with Auth0.
    [View Example](https://github.com/auth0-samples/auth0-ai-samples/tree/main/auth-for-mcp/nextjs-mcp-js)
+
+- **ASP.NET Core MCP Server (C#):**
+   An ASP.NET Core server example implementation of an MCP server using the C# SDK for MCP with Auth0.
+   [View Example](https://github.com/auth0-samples/auth0-ai-samples/tree/main/auth-for-mcp/aspnetcore-mcp-server)
