@@ -1,79 +1,96 @@
-import { LogIn, UserPlus } from 'lucide-react';
-import { ChatWindow } from '@/components/chat-window';
-import { GuideInfoBox } from '@/components/guide/GuideInfoBox';
+'use client';
+
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { auth0 } from '@/lib/auth0';
+import { Input } from '@/components/ui/input';
 
-export default async function Home() {
-  const session = await auth0.getSession();
+export default function Home() {
+  const [childName, setChildName] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [preferredTime, setPreferredTime] = useState('');
+  const [isGoogleConnected, setIsGoogleConnected] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
-  if (!session) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] my-auto gap-4">
-        <h2 className="text-xl">You are not logged in</h2>
-        <div className="flex gap-4">
-          <Button asChild variant="default" size="default">
-            <a href="/auth/login" className="flex items-center gap-2">
-              <LogIn />
-              <span>Login</span>
-            </a>
-          </Button>
-          <Button asChild variant="default" size="default">
-            <a href="/auth/login?screen_hint=signup">
-              <UserPlus />
-              <span>Sign up</span>
-            </a>
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  const handleConnectCalendar = () => {
+    setIsGoogleConnected(true);
+  };
 
-  const InfoCard = (
-    <GuideInfoBox>
-      <ul>
-        <li className="text-l">
-          🤝
-          <span className="ml-2">
-            This template showcases a simple chatbot using Vercel&apos;s{' '}
-            <a className="text-blue-500" href="https://sdk.vercel.ai/docs" target="_blank">
-              AI SDK
-            </a>{' '}
-            in a{' '}
-            <a className="text-blue-500" href="https://nextjs.org/" target="_blank">
-              Next.js
-            </a>{' '}
-            project.
-          </span>
-        </li>
-        <li className="hidden text-l md:block">
-          💻
-          <span className="ml-2">
-            You can find the prompt and model logic for this use-case in <code>app/api/chat/route.ts</code>.
-          </span>
-        </li>
-        <li className="hidden text-l md:block">
-          🎨
-          <span className="ml-2">
-            The main frontend logic is found in <code>app/page.tsx</code>.
-          </span>
-        </li>
-        <li className="text-l">
-          👇
-          <span className="ml-2">
-            Try asking e.g. <code>What can you help me with?</code> below!
-          </span>
-        </li>
-      </ul>
-    </GuideInfoBox>
-  );
+  const handleSchedule = () => {
+    setSuccessMessage('Your child’s 5-day water-saving challenge has been scheduled successfully.');
+  };
 
   return (
-    <ChatWindow
-      endpoint="api/chat"
-      emoji="🤖"
-      placeholder={`Hello ${session?.user?.name}, I'm your personal assistant. How can I help you today?`}
-      emptyStateComponent={InfoCard}
-    />
+    <main className="min-h-screen bg-slate-50 px-4 py-12 flex items-center justify-center">
+      <div className="w-full max-w-3xl rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+        <div className="mb-10 text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Eco Mentor Authorized to Act</p>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">Schedule my child’s water-saving challenge</h1>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">
+            A secure AI-powered sustainability assistant that helps parents schedule a 5-day water-saving challenge using Auth0 Token
+            Vault and Google Calendar.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-4 mb-8">
+          <Button asChild className="w-full sm:w-auto">
+            <a href="/auth/login" className="w-full text-center">Login with Auth0</a>
+          </Button>
+          <Button type="button" variant="outline" onClick={handleConnectCalendar} className="w-full sm:w-auto">
+            Connect Google Calendar
+          </Button>
+        </div>
+
+        <div className="mb-8 rounded-3xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
+          <p className="font-medium text-slate-900">Connection status</p>
+          <p className="mt-2 text-slate-600">
+            {isGoogleConnected ? 'Google Calendar connected' : 'Google Calendar not connected'}
+          </p>
+          {isGoogleConnected && <p className="mt-2 text-slate-500">Your calendar is ready for the Eco Mentor challenge.</p>}
+        </div>
+
+        <div className="grid gap-6">
+          <label className="grid gap-2 text-sm font-medium text-slate-700">
+            Child name
+            <Input
+              value={childName}
+              onChange={(event) => setChildName(event.target.value)}
+              placeholder="Enter your child’s name"
+            />
+          </label>
+
+          <label className="grid gap-2 text-sm font-medium text-slate-700">
+            Start date
+            <Input
+              type="date"
+              value={startDate}
+              onChange={(event) => setStartDate(event.target.value)}
+            />
+          </label>
+
+          <label className="grid gap-2 text-sm font-medium text-slate-700">
+            Preferred time
+            <Input
+              type="time"
+              value={preferredTime}
+              onChange={(event) => setPreferredTime(event.target.value)}
+            />
+          </label>
+
+          <Button type="button" size="lg" onClick={handleSchedule} className="mt-2 w-full">
+            Schedule my child’s water-saving challenge
+          </Button>
+        </div>
+
+        {successMessage ? (
+          <div className="mt-8 rounded-3xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-900">
+            {successMessage}
+          </div>
+        ) : (
+          <div className="mt-8 rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-500">
+            Your schedule will appear here once the challenge is created.
+          </div>
+        )}
+      </div>
+    </main>
   );
 }
